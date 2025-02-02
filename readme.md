@@ -131,9 +131,9 @@ This project is licensed under the ISC License.
 ## Contact
 
 For any queries, feel free to reach out to us:
+- 📧 Gautam Singh Rana: [LinkedIn](https://www.linkedin.com/in/gautam-rana-12a2b3257/)
 - 📧 Priyanshu Kumar Singh: [LinkedIn](https://www.linkedin.com/in/priyanshu-singh-3a6777212/)
 - 📧 Sanjay Bisht: [LinkedIn](https://www.linkedin.com/in/sanjay-bisht-80b13025a/)
-- 📧 Gautam Singh Rana: [LinkedIn](https://www.linkedin.com/in/gautam-rana-12a2b3257/)
 
 ---
 
