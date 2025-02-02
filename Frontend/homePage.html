@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Afacad+Flux:slnt,wght@1,100..1000&family=Merienda:wght@300..900&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="homePage.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>CouponHub</title>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="#top" id="logo">CouponHub</a>
+
+        <ul class="nav-links">
+            <li><a href="#Trade" id="links">Trade</a></li>
+            <li><a href="#Collection" id="links">Collection</a></li>
+            <li><a href="#Tutorials" id="links">Tutorials</a></li>
+            <li><a href="https://github.com/Priyanshu-Iron/CouponHub" id="links">Github</a></li>
+        </ul>
+
+        <div class="LoginAndSignup">
+            <!-- <div class="GS" onclick="toggleMenu()">
+                <a href="#getStarted" id="getStarted">Get Started</a>
+            </div> -->
+            <div class="LoginAndSignupSub">
+                <a href="#Login" id="login">Login</a>
+                <a href="/Frontend/register.html" id="Signup">Signup</a>
+            </div>
+        </div>
+
+        <div class="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+
+    <div class="container">  
+        <div id="Login" class="login">  
+            <h2>Login</h2>  
+            <form id="registrationForm" action="/login" method="POST" onsubmit="return handleFormSubmit(event)">
+                <div class="form-group">    
+                    <input type="text" id="username" name="username" placeholder="Enter username or Email" autocomplete="username">  
+                </div>  
+                <div class="form-group">    
+                    <input type="password" id="password" name="password" placeholder="Enter password" autocomplete="current-password">  
+                </div>  
+                <div class="form-group">  
+                    <input type="checkbox" id="remember-me" name="remember-me">  
+                    <label for="remember-me">Remember me</label>
+                    <a class="forget" href="#">Forgot Password?</a>  
+                </div>  
+                <button type="submit">Login</button>  
+                <p>Don't have an account? <a class="forget" href="/Frontend/register.html">Register</a></p>  
+            </form>  
+        </div>  
+    </div>
+
+    <div id="top">
+        <div id="nameDiv">
+            <h2 id="revolutioniseh2" data-aos="fade-up" data-aos-anchor="#top" data-aos-anchor-placement="top-center" data-aos-delay="250">Revolutionise</h2>
+            <h1 id="sentence1h1" data-aos="fade-up" data-aos-anchor="#top" data-aos-anchor-placement="top-center" data-aos-delay="500">the way you use a Coupon</h1>
+            <h1 id="sentence2h1" data-aos="fade-up" data-aos-anchor="#top" data-aos-anchor-placement="top-center" data-aos-delay="900">Using <span id="CH">CouponHub</span></h1>
+            <div class="sentence" data-aos="fade-up" data-aos-anchor="#top" data-aos-anchor-placement="top-center" data-aos-delay="1200">
+                <h2 id="sentence3h2">Buy</h2>
+                <h2 id="comaSign">,</h2>
+                <h2 id="sentence3h2">Sell</h2>
+                <h2 id="andSign">&</h2>
+                <h2 id="Exchange">Exchange</h2>
+            </div>
+        </div>
+    </div>
+
+    <div id="Trade" class="Trade" data-aos="fade-up">
+        <div class="cardContainer" data-aos="fade-up">
+            <article class="cardArticle">
+                <img src="Assets/CouponPurchase.webp" alt="image" class="cardImage">
+
+                <div class="cardData">
+                    <span class="cardDescription">Buy Coupon form CouponHub</span>
+                    <h2 class="cardTitle">Buy Coupon</h2>
+                    <a href="#" class="cardButton">ReadMore</a>
+                </div>
+            </article>
+
+            <article class="cardArticle">
+                <img src="Assets/SellCoupon.webp" alt="image" class="cardImage">
+
+                <div class="cardData">
+                    <span class="cardDescription">Sell Coupon on CouponHub</span>
+                    <h2 class="cardTitle">Sell Coupon</h2>
+                    <a href="#" class="cardButton">ReadMore</a>
+                </div>
+            </article>
+
+            <article class="cardArticle">
+                <img src="Assets/Exchange Coupon.webp" alt="image" class="cardImage">
+
+                <div class="cardData">
+                    <span class="cardDescription">Exchange Coupon on CouponHub</span>
+                    <h2 class="cardTitle">Exchange Coupon</h2>
+                    <a href="#" class="cardButton">ReadMore</a>
+                </div>
+            </article>
+        </div>
+    </div>
+
+    <div id="Collection" data-aos="fade-up">
+        <div class="wrapper">
+            <div class="itemLeft item1"><img src="Assets/Icons/flipkart.png" alt=""></div>
+            <div class="itemLeft item2"><img src="Assets/Icons/coupon.png" alt=""></div>
+            <div class="itemLeft item3"><img src="Assets/Icons/amazon.png" alt=""></div>
+            <div class="itemLeft item4"><h3>CouponHub</h3></div>
+            <div class="itemLeft item5"><img src="Assets/Icons/ajio.png" alt=""></div>
+            <div class="itemLeft item6"><img src="Assets/Icons/coupon 3.png" alt=""></div>
+            <div class="itemLeft item7"><img src="Assets/Icons/myntra.png" alt=""></div>
+            <div class="itemLeft item8"><h3>CouponHub</h3></div>
+        </div>
+        <div class="wrapper">
+            <div class="itemRight item1"><img src="Assets/Icons/google_pay.png" alt=""></div>
+            <div class="itemRight item2"><img src="Assets/Icons/coupon2.png" alt=""></div>
+            <div class="itemRight item3"><h3>CouponHub</h3></div>
+            <div class="itemRight item4"><img src="Assets/Icons/paytm.png" alt=""></div>
+            <div class="itemRight item5"><h3>CouponHub</h3></div>
+            <div class="itemRight item6"><img src="Assets/Icons/coupon 4.png" alt=""></div>
+            <div class="itemRight item7"><img src="Assets/Icons/phonepe.png" alt=""></div>
+            <div class="itemRight item8"><img src="Assets/Icons/coupon 5.png" alt=""></div>
+        </div>
+    </div>
+
+    <div id="Tutorials" data-aos="fade-up">
+        <h1>Tutorials Comming Soon</h1>
+    </div>
+
+    <div id="AboutUs" >
+        <p>
+            At <span id="aboutC">CouponHub</span>, we’re transforming the way coupons are used, exchanged, and shared. Our platform empowers users to not only buy and sell coupons but also to exchange unused ones with others—making every coupon valuable, even if it’s not for you. Why let a great deal go to waste when someone else could benefit from it?
+            Our mission is to create a community-driven marketplace where savings are shared and opportunities are maximized. With CouponHub, you can seamlessly trade your unused coupons, ensuring nothing goes unredeemed. Whether you're looking to swap for something better or simply help others save, our platform makes it easy to unlock value with every transaction.
+            With a secure, user-friendly interface and a constantly growing catalog of offers, CouponHub redefines the traditional coupon experience. We’re here to connect people through the power of shared savings and make sure every deal finds its perfect match.
+            Join us and start exchanging smarter with CouponHub—because there’s always someone who needs the coupon you have.
+        </p>
+    </div>
+
+    <footer>
+        <div id="footer_links">
+            <h2 id="footer">Where Every Coupon Finds a Home.</h2>
+            <!-- <h3>Get Started</h3> -->
+        </div>
+    </footer>
+
+    <!-- Initialize AOS with smoother animations --> 
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1500,  // Animation duration in milliseconds
+            easing: 'ease-in-out',  // Easing function for smooth animation
+            once: true,  // Animation happens only once
+            anchorPlacement: 'top-center',  // Position the animation starts
+        });
+    </script>
+
+<script>
+    async function handleFormSubmit(event) {
+    event.preventDefault();
+
+    const usernameOrEmail = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    if (!usernameOrEmail || !password) {
+        showToast("Both username/email and password are required.", "error");
+        return;
+    }
+
+    const payload = JSON.stringify({ usernameOrEmail, password });
+
+    try {
+        const response = await fetch('http://localhost:8000/api/v1/users/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: payload,
+            credentials: 'include' // Important for cookies
+        });
+
+        if (!response.ok) {
+            const errorResult = await response.json();
+            showToast("Login failed: " + errorResult.message, "error");
+            return;
+        }
+
+        const result = await response.json();
+
+        if (result.success) {
+            // Store tokens and user data
+            localStorage.setItem('accessToken', result.data.accessToken);
+            localStorage.setItem('refreshToken', result.data.refreshToken);
+            localStorage.setItem('userData', JSON.stringify(result.data.user));
+            
+            showToast("Login successful!", "success");
+            
+            setTimeout(() => {
+                window.location.href = '/Frontend/dashBoard.html';
+            }, 2000);
+        } else {
+            showToast("Login failed: " + result.message, "error");
+        }
+    } catch (error) {
+        console.error("Error submitting the form:", error);
+        showToast("An error occurred. Please try again later.", "error");
+    }
+}
+
+// Function to show toast notifications
+function showToast(message, type) {
+    Toastify({
+        text: message,
+        duration: 3000,
+        gravity: "top", // Top, bottom
+        position: "center", // Left, center, right
+        backgroundColor: type === "success" ? "green" : "red",
+        stopOnFocus: true, // Prevents dismissing on hover
+    }).showToast();
+}
+
+// Show Login form on click
+document.querySelector('#login').onclick = (event) => {
+    event.preventDefault(); // Prevent link from navigating
+    document.querySelector('.container').classList.toggle('active');
+};
+
+</script>
+
+</body>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+</html>

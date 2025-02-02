@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Afacad+Flux:slnt,wght@1,100..1000&family=Merienda:wght@300..900&family=Pacifico&display=swap" rel="stylesheet">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+
+<body>
+    <nav id="nav_bar" class="navBar">
+        <a href="#top" id="logo">CouponHub</a>
+
+        <div class="input-wrapper">
+            <input type="text" class="search-icon" placeholder="Start searching here...">
+            <span class="tune-icon"></span>
+        </div>
+
+        <div class="icon-container">
+            <button id="toggleSwitch" class="lightMode icon"></button>
+            <div class="notification icon">
+                <div class="notification-dropdown"></div>
+            </div>
+            <a href="#" class="setting icon"></a>
+            <div class="user icon" onclick="toggleMenu()">
+                <ul class="usersData" id="menu">
+                    <li><a href="/Frontend/profile.html">Profile</a></li>
+                    <li><a href="/Frontend/collection.html">Collection</a></li>
+                    <li><a href="#">History</a></li>
+                    <button id="logoutButton">Logout</button>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="addCoupon">
+        <button class="addCoupon" onclick="openPopup()">Add Coupon +</button>
+    </div>
+
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup">
+            <button class="popup-close" onclick="closePopup()">&times;</button>
+            <h2>Add Coupon</h2>
+            <form id="addCouponForm" enctype="multipart/form-data" onsubmit="return handleCouponSubmit(event)">
+                <input type="text" id="name" name="name" placeholder="Coupon Name" required>
+                <input type="text" id="couponCode" name="couponCode" placeholder=" Coupon Code" required>
+                <input type="text" id="couponPlace" name="place" placeholder="Coupon Origin" required>
+                <label for="couponDescription">Coupon Description</label>
+                <input type="text" id="couponDescription" name="couponDescription" placeholder="A brief description or terms of the coupon" required>
+                <label for="expiryDate" class="ExpiryDate">Expiry Date</label>
+                <input type="date" id="expiryDate" name="expiryDate" required>
+                <input type="number" id="couponValue" name="couponValue" placeholder="Coupon Value" required>
+                <input type="text" id="couponOwner" name="owner" placeholder="Owner" required>
+                <input type="file" id="couponImage" name="image" accept="image/*" value="NO IMAGE">
+                <h3 id="checkbox"><input type="checkbox" id="termsandcondition" name="termsandcondition" required> Terms and Condition</h3>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="trendingHeading">Trending Deals & Coupons</div>
+    <div id="otherUserCoupons" class="coupon-grid">
+        <!-- Coupons will be populated here -->
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script>
+        const popupOverlay = document.getElementById('popupOverlay');
+
+        function openPopup() {
+            popupOverlay.style.display = 'flex';
+        }
+
+        function closePopup() {
+            popupOverlay.style.display = 'none';
+        }
+        
+        async function handleCouponSubmit(event) {
+    event.preventDefault();
+
+    try {
+        const form = document.getElementById('addCouponForm');
+        const formData = new FormData(form);
+
+        const accessToken = localStorage.getItem('accessToken');
+        if (!accessToken) {
+            showToast("Please login first", "error");
+            return false;
+        }
+
+        // Validate form data
+        const requiredFields = ['name', 'couponCode', 'place', 'couponDescription', 'expiryDate', 'couponValue', 'owner'];
+        for (const field of requiredFields) {
+            if (!formData.get(field)) {
+                showToast(`${field} is required`, "error");
+                return false;
+            }
+        }
+
+        // Validate image if present
+        const imageFile = formData.get('image');
+        if (imageFile && imageFile.size > 0) {
+            const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (!validTypes.includes(imageFile.type)) {
+                showToast("Please upload a valid image file (JPG, PNG, or GIF)", "error");
+                return false;
+            }
+        }
+
+        const response = await fetch('http://localhost:8000/api/v1/coupons', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+
+        const data = await response.json();
+        
+        if (response.ok) {
+            showToast("Coupon added successfully!", "success");
+            form.reset();
+            closePopup();
+            // Refresh the coupons display
+            fetchAndDisplayOtherUserCoupons();
+        } else {
+            throw new Error(data.message || "Failed to add coupon");
+        }
+
+    } catch (error) {
+        console.error("Error submitting form:", error);
+        showToast(error.message || "An error occurred. Please try again.", "error");
+    }
+    return false;
+}
+
+// Logout
+document.getElementById('logoutButton').addEventListener('click', async function () {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        if (!accessToken) {
+            showToast("No active session found", "error");
+            return;
+        }
+
+        // Making the logout request to the API
+        const response = await fetch('http://localhost:8000/api/v1/users/logout', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+            }
+        });
+
+        if (response.ok) {
+            // Clear the accessToken from localStorage
+            localStorage.removeItem('accessToken');
+
+            // Redirect user to login page or home
+            window.location.href = '/Frontend/homePage.html#Login';  // Modify with the actual login page path
+            showToast("Successfully logged out", "success");
+        } else {
+            const data = await response.json();
+            showToast(data.message || "Failed to log out", "error");
+        }
+    } catch (error) {
+        console.error("Error during logout:", error);
+        showToast("An error occurred while logging out. Please try again.", "error");
+    }
+});
+
+
+// Update the showToast function
+function showToast(message, type) {
+    try {
+        console.log('Attempting to show toast:', message, type);
+        
+        if (typeof Toastify !== 'function') {
+            console.error('Toastify is not loaded!');
+            alert(message); // Fallback
+            return;
+        }
+
+        Toastify({
+            text: message,
+            duration: 3000,
+            gravity: "top",
+            position: "center",
+            backgroundColor: type === "success" ? "#4caf50" : "#f44336",
+            stopOnFocus: true,
+            onClick: function(){} // Callback after click
+        }).showToast();
+        
+        // console.log('Toast shown successfully');
+    } catch (error) {
+        console.error('Error showing toast:', error);
+        alert(message); // Fallback
+    }
+}
+
+async function fetchAndDisplayOtherUserCoupons() {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const response = await fetch('http://localhost:8000/api/v1/coupons/others', {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+        
+        const data = await response.json();
+        const couponsContainer = document.getElementById('otherUserCoupons');
+        couponsContainer.innerHTML = ''; // Clear existing coupons
+        
+        data.data.forEach(coupon => {
+            const couponElement = document.createElement('div');
+            couponElement.className = 'coupon-card';
+            
+            const hasAccess = coupon.couponCode !== '****-****-****';
+            
+            couponElement.innerHTML = `
+                <img src="${coupon.image || 'placeholder.jpg'}" alt="Coupon Image" class="coupon-image">
+                <div class="coupon-details">
+                    <h3>${coupon.name}</h3>
+                    <p>Origin: ${coupon.place}</p>
+                    <p>Value: ${coupon.couponValue}</p>
+                    <p>Expires: ${new Date(coupon.expiryDate).toLocaleDateString()}</p>
+                    <p>Owner: ${coupon.owner}</p>
+                    <div class="coupon-code ${hasAccess ? 'visible' : ''}">
+                        <span>${coupon.couponCode}</span>
+                        ${!hasAccess ? 
+                            `<button onclick="requestAccess('${coupon._id}')" class="request-button">
+                                Request Access
+                            </button>` : 
+                            '<span class="access-granted">Access Granted</span>'
+                        }
+                    </div>
+                </div>
+            `;
+            
+            couponsContainer.appendChild(couponElement);
+        });
+    } catch (error) {
+        console.error('Error fetching other user coupons:', error);
+        showToast('Failed to load other user coupons', 'error');
+    }
+}
+
+async function requestAccess(couponId) {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const response = await fetch(`http://localhost:8000/api/v1/coupons/${couponId}/request-access`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+        
+        const data = await response.json();
+        showToast(data.message, data.success ? 'success' : 'error');
+    } catch (error) {
+        console.error('Error requesting access:', error);
+        showToast('Failed to request access', 'error');
+    }
+}
+
+// Call this when the page loads
+document.addEventListener('DOMContentLoaded', fetchAndDisplayOtherUserCoupons);
+
+async function fetchNotifications() {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const response = await fetch('http://localhost:8000/api/v1/coupons/notifications', {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+        
+        const data = await response.json();
+        const notificationsContainer = document.querySelector('.notification-dropdown');
+        
+        notificationsContainer.innerHTML = ''; // Clear previous notifications
+        
+        if (data.data && data.data.length > 0) {
+            data.data.forEach(notification => {
+                const notificationElement = document.createElement('div');
+                notificationElement.className = 'notification-item';
+                
+                // Only show action buttons if status is pending or not set
+                const showActions = !notification.status || notification.status === 'pending';
+                
+                notificationElement.innerHTML = `
+                    <div class="notification-content">
+                        <p><strong>${notification.userId?.username || 'Unknown User'}</strong> requested access to coupon "${notification.couponId?.name || 'Unknown Coupon'}"</p>
+                        <small>${new Date(notification.createdAt).toLocaleString()}</small>
+                        ${!showActions ? `
+                            <div class="status-badge ${notification.status}">
+                                ${notification.status.charAt(0).toUpperCase() + notification.status.slice(1)}
+                            </div>
+                        ` : ''}
+                    </div>
+                    ${showActions ? `
+                        <div class="notification-actions">
+                            <button onclick="handleNotification('${notification._id}', 'accept')" class="accept-btn">Accept</button>
+                            <button onclick="handleNotification('${notification._id}', 'decline')" class="decline-btn">Decline</button>
+                        </div>
+                    ` : ''}
+                `;
+                notificationsContainer.appendChild(notificationElement);
+            });
+        } else {
+            notificationsContainer.innerHTML = `
+                <div class="notification-item no-notifications">
+                    <p>No new notifications</p>
+                    <small>Check back later for updates!</small>
+                </div>
+            `;
+        }
+    } catch (error) {
+        console.error('Error fetching notifications:', error);
+        showToast('Failed to load notifications', 'error');
+    }
+}
+
+// Update the handleNotification function
+async function handleNotification(notificationId, action) {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+        const response = await fetch(`http://localhost:8000/api/v1/coupons/notifications/${notificationId}/${action}`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const data = await response.json();
+        if (data.success) {
+            showToast(`Request ${action}ed successfully`, 'success');
+            // Immediately refresh notifications to show updated status
+            await fetchNotifications();
+        } else {
+            showToast(`Failed to ${action} request`, 'error');
+        }
+    } catch (error) {
+        console.error(`Error ${action}ing notification:`, error);
+        showToast(`Failed to ${action} request`, 'error');
+    }
+}
+
+// Add event listener to the notification icon
+document.querySelector('.notification.icon').addEventListener('click', fetchNotifications);
+
+
+// Add this to your JavaScript code
+let isNotificationOpen = false;
+
+document.querySelector('.notification.icon').addEventListener('click', function(e) {
+    e.stopPropagation(); // Prevent event from bubbling up
+    const dropdown = document.querySelector('.notification-dropdown');
+    
+    // Toggle dropdown visibility
+    if (!isNotificationOpen) {
+        dropdown.style.display = 'block';
+        isNotificationOpen = true;
+        fetchNotifications(); // Fetch notifications when opening
+    } else {
+        dropdown.style.display = 'none';
+        isNotificationOpen = false;
+    }
+});
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+    const dropdown = document.querySelector('.notification-dropdown');
+    const notificationIcon = document.querySelector('.notification.icon');
+    
+    if (!notificationIcon.contains(e.target) && isNotificationOpen) {
+        dropdown.style.display = 'none';
+        isNotificationOpen = false;
+    }
+});
+
+// Prevent dropdown from closing when clicking inside it
+document.querySelector('.notification-dropdown').addEventListener('click', function(e) {
+    e.stopPropagation();
+});
+    </script>
+</body>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="dashboard.js"></script>
+</html>

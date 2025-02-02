@@ -1,0 +1,211 @@
+html {
+    scroll-behavior: smooth;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-image: linear-gradient(75deg, #1E3E62, #000000, #0B192C);
+    font-family: "Afacad Flux", sans-serif;
+}
+
+.pacifico-regular {
+    font-family: "Pacifico", cursive;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.afacad-flux-navbarText {
+    font-family: "Afacad Flux", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+}
+
+.merienda-HeadingFont {
+    font-family: "Merienda", cursive;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* Ensure masonry layout works */
+.coupons-collection {
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap; /* Ensures coupons wrap to the next line if necessary */
+    gap: 20px;
+    justify-content: flex-start; /* Align items from the left */
+}
+
+.coupon-item {
+    width: 250px; /* Fixed width to ensure row alignment */
+    max-width: 100%;
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #FF6500;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    font-family: "Afacad Flux", sans-serif;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+
+.coupon-item:hover {
+    background-color: #1E3E62;
+    border: #FF6500 5px solid;
+    transform: translateY(-5px);
+}
+
+/* Modal Styling */
+.coupon-modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%; /* More responsive */
+    max-width: 600px;
+    color: black;
+    text-align: center;
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center items */
+}
+
+.coupon-modal-content img {
+    width: 100%; /* Full width for better responsiveness */
+    height: auto;
+    max-height: 300px;
+    object-fit: cover;
+    margin-bottom: 20px; /* Space below the image */
+}
+
+.coupon-item img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+    display: block;
+    object-fit: cover; /* Ensure image fits properly */
+}
+
+.coupon-item h3, .coupon-item p {
+    text-align: center;
+}
+
+h1 {
+    color: white;
+    font-family: "Afacad Flux", sans-serif;
+    font-size: 50px;
+    text-align: center;
+    text-decoration: underline #FF6500;
+}
+
+#heading {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    justify-content: center;
+}
+
+#couponheading {
+    color: #FF6500;
+    font-family: "Pacifico", cursive;
+    letter-spacing: 3px;
+}
+
+.coupon-modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+}
+
+.coupon-modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 600px;
+    color: black;
+    text-align: center;
+    display: flex;
+    flex-direction: row; /* Align elements in a row direction */
+    justify-content: center; /* Center items horizontally */
+    align-items: center; /* Align items vertically in the center */
+}
+
+.close-btn {
+    color: #FF6500;
+    font-size: 60px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: #ff0000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.coupon-modal-content img {
+    width: 50%;
+    height: auto;
+    max-height: 300px;
+    object-fit: cover;
+    margin-right: 20px; /* Space between the image and text */
+}
+
+.expand-btn {
+    background-color: #1E3E62;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 15px;
+}
+
+.expand-btn:hover {
+    background-color: #FF6500;
+    transform: translateY(-3px);
+}
+
+.expand-btn:focus {
+    outline: none;
+}
+
+.expand-btn:active {
+    transform: translateY(2px);
+}
+
+#couponList {
+    display: flex;
+    flex-wrap: wrap; /* Ensures coupons wrap to the next line if needed */
+    justify-content: center; /* Centers the items */
+    gap: 20px; /* Adds space between coupons */
+}

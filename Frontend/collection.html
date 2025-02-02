@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collection</title>
+    <!-- Include Toastify CSS and JS -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css">
+    <link rel="stylesheet" href="/Frontend/collection.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Afacad+Flux:slnt,wght@1,100..1000&family=Merienda:wght@300..900&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.js"></script>
+</head>
+<body>
+    <div id="header">
+        <i id="backBtn" class="fa fa-arrow-circle-left" style="font-size:50px; color:#FF6500 ;"></i>
+        <div id="heading">
+            <h1>Your</h1>
+            <h1 id="couponheading">Coupons</h1>
+        </div>
+    </div>
+    <div id="couponsCollection" class="coupons-collection">
+        <div id="couponList">
+            <p>Loading coupons...</p> <!-- Default loading state -->
+        </div>
+    </div>
+    
+    <!-- Modal for Coupon Details -->
+    <div id="couponModal" class="coupon-modal" aria-hidden="true">
+        <div class="coupon-modal-content">
+            <span id="closeModal" class="close-btn" aria-label="Close modal">&times;</span>
+            <div id="modalDetails"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async function () {
+    const couponListContainer = document.getElementById('couponList');
+    const accessToken = localStorage.getItem('accessToken');
+
+    if (!accessToken) {
+        showToast("Please login to view your collection", "error");
+        return;
+    }
+
+    // Show loading state
+    couponListContainer.innerHTML = "<p>Loading coupons...</p>";
+
+    try {
+        // Updated URL to match the backend route
+        const response = await fetch('http://localhost:8000/api/v1/coupons/user', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to fetch coupons');
+        }
+
+        const result = await response.json();
+        const coupons = result.data;
+
+        if (!coupons || coupons.length === 0) {
+            couponListContainer.innerHTML = "<p>No coupons added yet!</p>";
+            return;
+        }
+
+        couponListContainer.innerHTML = ''; // Clear loading state
+
+        coupons.forEach(coupon => {
+            const couponElement = document.createElement('div');
+            couponElement.classList.add('coupon-item');
+
+            // Add styling for better visibility of the coupon code
+            couponElement.innerHTML = `
+                <div class="coupon-header">
+                    <h3 class="coupon-name">${coupon.name}</h3>
+                    <div class="coupon-code-container">
+                        <h3 class="coupon-code">Code: ${coupon.couponCode}</h3>
+                    </div>
+                    <h3 class="coupon-value">Value: ${coupon.couponValue}</h3>
+                </div>
+                <div class="coupon-details">
+                    <p>Place: ${coupon.place}</p>
+                    <p>Owner: ${coupon.owner}</p>
+                    <p>Expires: ${new Date(coupon.expiryDate).toLocaleDateString()}</p>
+                </div>
+                <button class="expand-btn">Show Details</button>
+            `;
+            
+            couponListContainer.appendChild(couponElement);
+
+            const expandBtn = couponElement.querySelector('.expand-btn');
+            expandBtn.addEventListener('click', () => openModal(coupon));
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        showToast(error.message || "Failed to load coupons", "error");
+        couponListContainer.innerHTML = "<p>Failed to load coupons. Please try again later.</p>";
+    }
+});
+
+function openModal(coupon) {
+    const modal = document.getElementById('couponModal');
+    const modalDetails = document.getElementById('modalDetails');
+    const closeModal = document.getElementById('closeModal');
+
+    modalDetails.innerHTML = `
+        <div class="modal-header">
+            <h2>${coupon.name}</h2>
+        </div>
+        <div class="modal-body">
+            <div class="coupon-code-section">
+                <h3>Coupon Code: ${coupon.couponCode}</h3>
+                <h3>Value: ${coupon.couponValue}</h3>
+            </div>
+            <div class="coupon-info">
+                <p><strong>Place:</strong> ${coupon.place}</p>
+                <p><strong>Owner:</strong> ${coupon.owner}</p>
+                <p><strong>Expiry Date:</strong> ${new Date(coupon.expiryDate).toLocaleDateString()}</p>
+            </div>
+            ${coupon.image ? `
+                <div class="coupon-image">
+                    <img src="${coupon.image}" alt="${coupon.name}" />
+                </div>
+            ` : ''}
+            <div class="coupon-description">
+                <h3>Description:</h3>
+                <p>${coupon.couponDescription}</p>
+            </div>
+        </div>
+    `;
+
+    modal.style.display = 'block';
+
+    closeModal.onclick = function() {
+        modal.style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    }
+}
+
+function showToast(message, type, duration = 3000) {
+    Toastify({
+        text: message,
+        duration: duration,
+        gravity: "top",
+        position: "center",
+        backgroundColor: type === "success" ? "#4caf50" : 
+                        type === "error" ? "#f44336" : "#2196f3",
+        stopOnFocus: true,
+        close: duration === 0
+    }).showToast();
+}
+
+// Back button functionality
+const backBtn = document.getElementById('backBtn');
+backBtn.addEventListener('click', function() {
+    window.history.back();
+});
+    </script>
+</body>
+</html>
