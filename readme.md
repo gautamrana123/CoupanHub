@@ -115,10 +115,7 @@ CouponHub/
 - 🔔 **notie**: Notification library for alerts.
 
 ## Authors
-
-- 🔝 **Priyanshu Kumar Singh** (Full Stack Developer)
-- 🎮 **Sanjay Bisht** (Backend & Frontend Developer)
-- 🎨 **Gautam Singh Rana** (Frontend Developer)
+- 🎨 **Gautam Singh Rana** (Full Stack Developer)
 
 ## Contributions
 
